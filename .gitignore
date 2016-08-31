@@ -1,0 +1,4 @@
+#ignore target directory and idea configuration files
+/work
+/.idea
+*.iml

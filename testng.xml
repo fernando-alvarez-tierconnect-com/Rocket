@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Filename: testng.xml
+  Note: You have to change the following according to your environment:
+          -<class name="com.packageName.MyTestClassName" />
+-->
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<suite name="Identity functional tests">
+
+    <test name="Create Company Tests">
+        <classes>
+            <class name="com.trucentrix.test.CreateCompanyTest"/>
+            <!--<class name="com.trucentrix.test.CreateDepartmentTest"/>-->
+            <!--<class name="com.trinary.jedx.action.ClientLoginDuplicateTokenTest" />-->
+            <!--<class name="com.trinary.jedx.action.ClientLoginNegativeTest" />-->
+        </classes>
+    </test>
+
+    <!--<test name="Logout Method Tests">-->
+    <!--<classes>-->
+    <!--<class name="com.trinary.jedx.action.ClientLogoutTest" />-->
+    <!--<class name="com.trinary.jedx.action.ClientLogoutNegativeTest" />-->
+    <!--</classes>-->
+    <!--</test>-->
+</suite>
+
+

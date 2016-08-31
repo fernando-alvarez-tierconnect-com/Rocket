@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+<project name="logic_jedx_main Build" default="init" basedir=".">
+
+    <description>
+        Trinary Java EDX Test
+    </description>
+
+    <!--Properties-->
+    <property environment="env" />
+    <property name="root.dir" value="${env.SVN_SRC_HOME}" />
+    <property name="web.dir" value="${basedir}/webapp" />
+
+    <property name="src.dir" value="${basedir}/src" />
+    <property name="src.java.dir" value="${src.dir}/java" />
+    <property name="src.test.dir" value="${basedir}/test" />
+
+    <property name="work.dir" value="${basedir}/work" />
+    <property name="work.web.dir" value="${work.dir}/webapp" />
+    <property name="work.src.dir" value="${work.dir}/src" />
+    <property name="work.src.java.dir" value="${work.src.dir}/java" />
+    <property name="work.src.test.dir" value="${work.dir}/unittest" />
+
+    <property file="build.properties" />
+    <property name="jedx.data.dir" value="${env.JAVA_OPTS}" />
+
+    <macrodef name="macro-clean">
+        <sequential>
+            <delete dir="${work.dir}" />
+        </sequential>
+    </macrodef>
+
+    <target name="clean" description="clean work folder">
+        <macro-clean />
+    </target>
+
+    <target name="compile" description="Initialize all required environment variables">
+        <macro-compile/>
+    </target>
+
+    <!-- copy webapp files into the working webapp directory -->
+    <target name="copy">
+        <mkdir dir="${work.dir}/src/java"/>
+        <copy todir="${work.web.dir}" overwrite="true">
+            <fileset dir="${web.dir}" includes="**/*.*"  />
+        </copy>
+    </target>
+
+    <!-- compile the java src files -->
+    <path id="compile">
+        <pathelement location="${work.src.java.dir}" />
+        <!--<fileset dir="${lib1.dir}" includes="**/*.jar" />-->
+        <fileset dir="${lib2.dir}" includes="**/*.jar" />
+    </path>
+
+    <macrodef name="macro-compile">
+        <attribute name="deprecation" default="true" />
+        <attribute name="debug" default="true" />
+        <sequential>
+            <javac srcdir="${src.java.dir};${src.test.dir}" destdir="${output.dir}" failonerror="true" deprecation="@{deprecation}" debug="@{debug}" source="1.6" target="1.6" fork="true" memoryinitialsize="256m" memorymaximumsize="1024m">
+                <classpath refid="compile" />
+            </javac>
+        </sequential>
+    </macrodef>
+
+    <!-- compile the java src files -->
+    <target name="init" depends="copy">
+        <macro-compile debug="true" deprecation="false" />
+    </target>
+
+    <!-- compile the java test files -->
+    <path id="compile-test">
+        <!--<pathelement location="${work.src.test.dir}" />-->
+        <!--<fileset dir="${lib1.dir}" includes="**/*.jar" />-->
+        <fileset dir="${lib2.dir}" includes="**/*.jar" />
+    </path>
+
+    <macrodef name="macro-compile-test">
+        <attribute name="deprecation" default="true" />
+        <attribute name="debug" default="true" />
+        <sequential>
+            <javac srcdir="${src.test.dir};" destdir="${output.dir}" failonerror="true" deprecation="@{deprecation}" debug="@{debug}" source="1.7" target="1.7" fork="true" memoryinitialsize="256m" memorymaximumsize="1024m">
+                <classpath refid="compile-test" />
+            </javac>
+        </sequential>
+    </macrodef>
+    <target name="compile-test" >
+        <macro-compile-test debug="true" deprecation="false" />
+    </target>
+
+    <!--testNG-->
+    <taskdef name="testng" classname="org.testng.TestNGAntTask">
+        <classpath>
+            <pathelement location="${basedir}/lib/testng-6.9.4.jar" />
+        </classpath>
+    </taskdef>
+
+    <path id="classes">
+        <pathelement location="${work.dir}"/>
+        <fileset dir="${basedir}/lib" includes="*.jar"/>
+    </path>
+
+    <property name="testng.output.dir" value="${basedir}/report"/>
+
+    <target name="run-test">
+        <!--<echo message="${basedir}/work/test/com/trinary/jedx/action"/>-->
+        <!--<echo message="${work.dir}/production/Trucentrix_Clean/com/trucentrix/test"/>-->
+        <!-- Create the Report directory. -->
+        <mkdir dir="${testng.output.dir}"/>
+        <testng  outputdir="${testng.output.dir}" classpathref="classes" haltOnFailure="true" verbose="2">
+            <xmlfileset dir="." includes="testng.xml"/>
+        </testng>
+        <echo message="${basedir}/work/test/com/trinary/jedx/action"/>
+        <!--<jvmarg line="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" />-->
+    </target>
+
+
+</project>
